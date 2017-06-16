@@ -81,12 +81,13 @@ docker push registry.gitlab.com/rihardst/cloud_project_infrastructure:nginx_arm_
 
 ### Vault
 Differences here from the original:
+
 - Remove the provided docker-base commands, that download dumb-init and gosu
 - Thus get dumb-init as written in https://github.com/Yelp/dumb-init/issues/138
 - Download gosu armhf version from latest release on Github
 - For sake of simplicity, do not download those in Container, but outside.
   - Because getting dumb-init depends on Debian `ar` executable.
-
+- Using self built alpine 3.6 image, as armhf nor arm32v7 had alpine 3.6 images
 ```
 git clone https://github.com/hashicorp/docker-vault
 cd $(ls -d docker-vault/*/ | sort | tail -n 1) # Find the latest version
