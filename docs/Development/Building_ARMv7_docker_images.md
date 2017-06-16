@@ -88,6 +88,8 @@ Differences here from the original:
   - Because getting dumb-init depends on Debian `ar` executable.
 
 ```
+git clone https://github.com/hashicorp/docker-vault
+cd $(ls -d docker-vault/*/ | sort | tail -n 1) # Find the latest version
 mkdir bin
 wget http://ftp.us.debian.org/debian/pool/main/d/dumb-init/dumb-init_1.2.0-1_armhf.deb
 ar -x *.deb
@@ -95,9 +97,7 @@ tar -xvf data.tar.xz
 cp usr/bin/dumb-init bin/
 wget $(curl -s https://api.github.com/repos/tianon/gosu/releases/latest | grep -e '\"browser_download_url.*armhf\"' | sed -n 's/"browser_download_url.* "//p' | sed 's/"//g') -O bin/gosu
 chmod -R 755 bin/
-git clone https://github.com/hashicorp/docker-vault
-cd $(ls -d docker-vault/*/ | sort | tail -n 1) # Find the latest version
-sed -i 's/FROM /FROM armhf\//g' Dockerfile
+sed -i 's#FROM .*#FROM registry.gitlab.com/rihardst/cloud_project_infrastructure:alpine_armhf_3.6.1#g' Dockerfile
 sed -i 's/amd64/arm/g' Dockerfile
 sed -i 's/gpg --recv-keys/gpg-agent --daemon \&\& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys/g' Dockerfile
 sed -i '/docker-base/ d' Dockerfile
