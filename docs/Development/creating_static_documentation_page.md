@@ -7,12 +7,11 @@ cd cloud_project_documentation
 mkdocs serve
 mkdocs build # Build the site.
 ```
-Using Cinder theme.
-https://sourcefoundry.org/cinder/
+Using [Cinder theme](https://sourcefoundry.org/cinder/).
 
 
 ## Nginx configuration
-https://www.nginx.com/resources/admin-guide/serving-static-content/
+[Nginx admin guide - serving static content](https://www.nginx.com/resources/admin-guide/serving-static-content/)
 ```
 server {
   listen 8001;
