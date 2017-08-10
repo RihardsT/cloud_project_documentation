@@ -3,8 +3,9 @@ Using [12factor-vault](https://github.com/jdelic/12factor-vault/) and [django-po
 
 For local testing ran postgres and vault containers in the same network (possibly create the network with `docker network create django`):
 ```
-docker run --rm --name postgres --network django --hostname postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres postgres:alpine
-docker run --rm --network django -p 8200:8200 --cap-add=IPC_LOCK --name vault vault:latest
+export POSTGRES_PASSWORD=YOUR_POSTGRES_PASSWORD_HERE
+docker run --rm --name postgres --network django --hostname postgres -p 5432:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres postgres:alpine
+docker run --rm --network django -p 8200:8200 --cap-add=IPC_LOCK --name vault -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} vault:latest
 ```
 Note the Vault root token, which I was using for authentication.
 Further is the required setup for [django-postgresql-setrole](https://github.com/jdelic/django-postgresql-setrole), which required quite some modification.
@@ -30,7 +31,7 @@ vault mount -path=$VAULT_DATABASE_PATH database
 vault write $VAULT_DATABASE_PATH/config/$DATABASE_NAME \
     plugin_name=postgresql-database-plugin \
     allowed_roles="fullaccess" \
-    connection_url="postgresql://postgres:postgres@postgres:5432/?sslmode=disable" # Disable SSL mode for connection config while testing
+    connection_url="postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/?sslmode=disable" # Disable SSL mode for connection config while testing
     # Note the insecure password for postgres user here. It MUST be changed to something safer outside of testing environment.
 
 vault write $VAULT_DATABASE_PATH/roles/fullaccess \
@@ -92,8 +93,11 @@ django-postgresql-setrole
 
 Then I was running Django, Gunicorn container via docker-compose and passing parameters required by 12factor-vault
 ```
-- VAULT_TOKEN=YOUR_TOKEN_HERE
+- VAULT_TOKEN=${VAULT_TOKEN}
 - DATABASE_NAME=django
 - DATABASE_OWNERROLE=django_owner
 - VAULT_DATABASE_PATH=django-auth/creds/fullaccess
 ```
+
+To not have VAULT_TOKEN in the compose file, exported the variable like so:
+`export VAULT_TOKEN=YOUR_TOKEN_HERE`
