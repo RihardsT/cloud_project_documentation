@@ -8,3 +8,10 @@
 I had set up docker-compose to run with latest version of postgres container.
 And the latest tag had changed to point to postgres 10 beta3, but I was previously running postgres 10 beta2.
 Looks like DB upgrade requires export/import.
+
+
+## docker-compose
+```
+ImportError: No module named packaging.version
+```
+Because i'm using sudo. sudo uses python 2 instead of pyenv's python
