@@ -16,6 +16,7 @@ apk add --no-cache docker && \
 pip install molecule==1.25.0 docker && \
 cd /d && \
 molecule list && \
+molecule create && \
 molecule converge'
 ```
 Here installing Molecule 1.25.0, as Molecule 2 has many changes that I'm not yet ready for.

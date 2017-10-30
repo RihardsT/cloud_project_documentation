@@ -15,3 +15,12 @@ Looks like DB upgrade requires export/import.
 ImportError: No module named packaging.version
 ```
 Because i'm using sudo. sudo uses python 2 instead of pyenv's python
+
+
+
+## Molecule 1.25.0 inside docker
+```
+TASK [Gathering Facts] *********************************************************
+fatal: [cloud_project_ansible]: UNREACHABLE! => {"changed": false, "msg": "Authentication or permission failure. In some cases, you may have been able to authenticate and did not have permissions on the remote directory. Consider changing the remote temp path in ansible.cfg to a path rooted in \"/tmp\". Failed command was: ( umask 77 && mkdir -p \"` echo ~/.ansible/tmp/ansible-tmp-1505333512.92-124587904433232 `\" && echo ansible-tmp-1505333512.92-124587904433232=\"` echo ~/.ansible/tmp/ansible-tmp-1505333512.92-124587904433232 `\" ), exited with result 1", "unreachable": true}
+```
+I believe previously molecule converge automatically created container, but now I had to run molecule create before.
